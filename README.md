@@ -1,6 +1,7 @@
->> 설치 모듈
+# 설치 모듈
+
 npm install -D webpack webpack-cli
-npm i -D webpack-dev-server 
+npm i -D webpack-dev-server
 npm install --save-dev css-loader
 npm install --save-dev style-loader
 npm i -D mini-css-extract-plugin
@@ -14,6 +15,11 @@ npm i -D @babel/plugin-transform-runtime
 npm install --save @babel/runtime-corejs3
 npm install --save-dev express webpack-dev-middleware
 
+npm i -D handlebars handlebars-loader
+npm install --save-dev html-loader
 
->> 학습
-https://webpack.kr/guides/code-splitting/
+# 학습
+
+1. https://webpack.kr/guides/code-splitting/
+2. https://kdydesign.github.io/2020/10/06/spa-route-tutorial/
+3. https://www.npmjs.com/package/handlebars-webpack-plugin
