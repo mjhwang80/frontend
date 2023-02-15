@@ -2,24 +2,35 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HandlebarsPlugin = require("handlebars-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+const ROOT = "./app/src";
+const DIST = "./app/dist";
 
 let entry = {
-  main: "./src/app.js",
-  sub: "./src/sub.js",
-  sub2: "./src/sub2.js",
+  index: "./src/app.js",
+  about: "./src/pages/about.js",
 };
 
 let multiplesHtmlWebpackPlugins = Object.entries(entry).map(([key, value]) => {
-  let templatePage = "./src/views/template/sub.hbs";
-  if (key === "main") templatePage = "./src/views/template/main.hbs";
+  let templatePage = "./src/views/template/sub.page.template.hbs";
+  if (key === "index")
+    templatePage = "./src/views/template/main.page.template.hbs";
   return new HtmlWebpackPlugin({
     filename: key + ".html",
     //hash: true,
     inject: true,
     template: templatePage, // template file name
     //excludeChunks: ["main"], // entry에서 해당 리스트를 제외한 나머지
-    minify: false, //압축 설정
     chunks: [key], //어떤 js 번들을 script에 넣을지 결정
+    minify:
+      process.env.NODE_ENV === "production"
+        ? {
+            removeComments: true, // 주석 제거
+            collapseWhitespace: true, // 빈칸 제거
+            removeAttributeQuotes: true, // 따옴표의 중복인 경우 따옴표 생략 (HTML 은 항상 따옴표를 사용하도록 권장하긴 함..)
+          }
+        : false, //압축 설정
   });
 });
 
@@ -27,8 +38,9 @@ module.exports = {
   entry: entry,
   devtool: "inline-source-map",
   devServer: {
-    port: 8890,
+    port: 8888,
     static: "./dist",
+    hot: true, //리로드를 적용해 바로바로 빌드 결과를 확인
     proxy: {
       "/api/": {
         // /api/로 시작하는 url은 아래의 전체 도메인을 추가하고, 옵션을 적용
