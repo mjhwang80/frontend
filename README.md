@@ -20,6 +20,10 @@ npm install --save-dev html-loader
 npm i -D handlebars handlebars-webpack-plugin
 npm install -D eslint
 
+npm i -D terser-webpack-plugin
+npm i -D mini-css-extract-plugin css-loader css-minimizer-webpack-plugin
+npm install --save-dev @babel/core babel-loader @babel/preset-env
+
 # 학습
 
 1. https://webpack.kr/guides/code-splitting/

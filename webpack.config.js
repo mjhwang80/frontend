@@ -86,6 +86,11 @@ module.exports = {
         test: /\.xml$/i,
         use: ["xml-loader"],
       },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"],
+      },
     ],
   },
   output: {
