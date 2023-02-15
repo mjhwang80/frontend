@@ -18,6 +18,7 @@ npm install --save-dev express webpack-dev-middleware
 npm i -D handlebars handlebars-loader
 npm install --save-dev html-loader
 npm i -D handlebars handlebars-webpack-plugin
+npm install -D eslint
 
 # 학습
 

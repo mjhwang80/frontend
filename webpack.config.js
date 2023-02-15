@@ -3,13 +3,28 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HandlebarsPlugin = require("handlebars-webpack-plugin");
 
+let entry = {
+  main: "./src/app.js",
+  sub: "./src/sub.js",
+  sub2: "./src/sub2.js",
+};
+
+let multiplesHtmlWebpackPlugins = Object.entries(entry).map(([key, value]) => {
+  let templatePage = "./src/views/template/sub.hbs";
+  if (key === "main") templatePage = "./src/views/template/main.hbs";
+  return new HtmlWebpackPlugin({
+    filename: key + ".html",
+    //hash: true,
+    inject: true,
+    template: templatePage, // template file name
+    //excludeChunks: ["main"], // entry에서 해당 리스트를 제외한 나머지
+    minify: false, //압축 설정
+    chunks: [key], //어떤 js 번들을 script에 넣을지 결정
+  });
+});
+
 module.exports = {
-  entry: {
-    router: "./src/router.js",
-    main: "./src/app.js",
-    sub: "./src/sub.js",
-    print: "./src/print.js",
-  },
+  entry: entry,
   devtool: "inline-source-map",
   devServer: {
     port: 8890,
@@ -24,30 +39,11 @@ module.exports = {
     },
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      title: "Development",
-      filename: "main.html", // output file name
-      template: "./src/views/template/main.hbs", // template file name
-      chunks: ["main"], //어떤 js 번들을 script에 넣을지 결정
-      minify: false, //압축 설정
-    }),
-    new HtmlWebpackPlugin({
-      title: "Development",
-      filename: "sub.html", // output file name
-      template: "./src/views/template/sub.hbs", // template file name
-      chunks: ["sub"], //어떤 js 번들을 script에 넣을지 결정
-      minify: false, //압축 설정
-    }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css",
     }),
-    new HandlebarsPlugin({
-      partials: [
-        path.join(process.cwd(), "app", "src", "components", "*", "*.hbs"),
-      ],
-    }),
-  ],
+  ].concat(multiplesHtmlWebpackPlugins),
   module: {
     rules: [
       {
@@ -77,14 +73,6 @@ module.exports = {
       {
         test: /\.xml$/i,
         use: ["xml-loader"],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/preset-env"],
-        },
       },
     ],
   },
