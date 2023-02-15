@@ -1,5 +1,15 @@
 // css
+import * as Indi from "./modules/Indi/index.js";
+import { getNode, createElement, render } from "./modules/DOM.js";
+
 require("./assets/css/style.css");
+
+// Indi 멤버에서 하위 모듈 추출
+const {
+  logger: { success, error },
+  tester: { test, expect },
+  utils: { isFunction },
+} = Indi;
 
 // router
 const {
